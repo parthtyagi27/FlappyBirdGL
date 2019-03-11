@@ -12,9 +12,6 @@ public class Transformation
         matrix.rotate((float) Math.toRadians(rotation.z), 0, 0, 1);
         matrix.rotate((float) Math.toRadians(rotation.y), 0, 1, 0);
         matrix.rotate((float) Math.toRadians(rotation.x), 1, 0, 0);
-//        matrix.rotate(rotation.z, 0, 0, 1);
-//        matrix.rotate(rotation.y, 0, 1, 0);
-//        matrix.rotate(rotation.x, 1, 0, 0);
         return matrix;
     }
 }

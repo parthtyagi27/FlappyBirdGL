@@ -14,7 +14,7 @@ public class Bird extends Entity
     public static final float width = TextureAtlas.birdWidth - 60, height = TextureAtlas.birdHeight - 40;
     public static boolean isAlive = true;
 
-    private static final float maxUpwardsRot = 5f, maxDownwardsRot = -60f;
+    private static final float maxUpwardsRot = 30f, maxDownwardsRot = -60f;
     private static final float rotationStep = 1f;
     private float downwardsAcceleration = 0.01f, upwardsAcceleration = 0.5f;
     private static final float gravityConstant = 0.5f;
@@ -65,10 +65,11 @@ public class Bird extends Entity
             else
                 fall();
 
-            if(positionVector.y < 0 + Math.cos(Math.toDegrees(rotationVector.z())))
+            if(positionVector.y < Math.cos(Math.toRadians(rotationVector.z())))
                 isAlive = false;
 
-            System.out.println("Bird Position = " + positionVector.y + " angle = " + angle);
+//            System.out.println("Bird Position = " + positionVector.y + " angle = " + rotationVector.z());
+//            System.out.println(Transformation.createTransformation(positionVector, rotationVector).m31());
         }
     }
 
@@ -79,7 +80,7 @@ public class Bird extends Entity
         downwardsAcceleration += 0.05f;
         if(rotationVector.z() >= maxDownwardsRot)
         {
-            rotationVector.z += -rotationStep;
+            rotationVector.z += -(rotationStep * 1.25);
         }
         angle += rotationStep;
 
@@ -90,8 +91,8 @@ public class Bird extends Entity
         if(positionVector.y <= targetY)
         {
             positionVector.y += upwardsAcceleration;
-//            upwardsAcceleration -= 0.05f;
-
+            if(upwardsAcceleration <= 4f)
+                upwardsAcceleration += 0.5f;
             if (rotationVector.z() <= maxUpwardsRot)
             {
                 rotationVector.z += (rotationStep * 4);

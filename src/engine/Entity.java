@@ -5,16 +5,15 @@ import org.joml.Vector3f;
 
 public abstract class Entity
 {
-    public Matrix4f modelMatrix;
     public Vector3f positionVector;
+    public Vector3f rotationVector;
     public Mesh mesh;
-    private float rotX, rotY, rotZ;
     public Camera camera;
 
     public Entity()
     {
-        modelMatrix = new Matrix4f();
         positionVector = new Vector3f();
+        rotationVector = new Vector3f();
     }
 
     public abstract void render();

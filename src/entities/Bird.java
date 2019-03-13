@@ -6,19 +6,21 @@ import math.Transformation;
 import org.joml.Vector3f;
 import org.lwjgl.glfw.GLFW;
 
+
+
 public class Bird extends Entity
 {
 
     public static final float width = TextureAtlas.birdWidth - 60, height = TextureAtlas.birdHeight - 40;
     public static boolean isAlive = true;
 
-    private static final float maxUpwardsRot = 0.6f, maxDownwardsRot = -60f;
+    private static final float maxUpwardsRot = 5f, maxDownwardsRot = -60f;
     private static final float rotationStep = 1f;
-    private float acceleration = 0.01f;
+    private float downwardsAcceleration = 0.01f, upwardsAcceleration = 0.5f;
     private static final float gravityConstant = 0.5f;
-    private float rotCount;
+    private float targetY;
+    private float angle;
 
-    private Vector3f rotationVector;
 
     public Bird(Camera camera)
     {
@@ -32,10 +34,10 @@ public class Bird extends Entity
                 };
         mesh = new Mesh(vertices, TextureAtlas.getBirdTexture());
         this.camera = camera;
-        modelMatrix.translate((Main.WIDTH - width)/2, (Main.HEIGHT - height)/2, 0);
         positionVector = new Vector3f((Main.WIDTH - width)/2, (Main.HEIGHT - height)/2, 0);
-
         rotationVector = new Vector3f();
+
+        angle = (float) Math.toDegrees(Math.asin((float) (height/(Math.sqrt(Math.pow(width, 2) + Math.pow(height, 2))))));
     }
 
     @Override
@@ -56,45 +58,44 @@ public class Bird extends Entity
         if(isAlive)
         {
             if (Handler.isKeyDown(GLFW.GLFW_KEY_SPACE))
-                jump();
-            else
             {
-                fall();
+                targetY = positionVector.y + 75;
+                jump();
             }
+            else
+                fall();
 
-            if(positionVector.y <= height)
+            if(positionVector.y < 0 + Math.cos(Math.toDegrees(rotationVector.z())))
                 isAlive = false;
+
+            System.out.println("Bird Position = " + positionVector.y + " angle = " + angle);
         }
     }
 
     private void fall()
     {
-        positionVector.y -= (gravityConstant + acceleration);
-        acceleration += 0.05f;
-        if(rotCount >= maxDownwardsRot)
+        upwardsAcceleration = 0.5f;
+        positionVector.y -= (gravityConstant + downwardsAcceleration);
+        downwardsAcceleration += 0.05f;
+        if(rotationVector.z() >= maxDownwardsRot)
         {
             rotationVector.z += -rotationStep;
-            rotCount -= rotationStep;
-            modelMatrix.rotateZ(-rotationStep);
         }
-        modelMatrix.translate(positionVector);
+        angle += rotationStep;
 
     }
 
     private void jump()
     {
-        positionVector.y += 0.1f;
-        if(rotCount <= maxUpwardsRot)
+        if(positionVector.y <= targetY)
         {
-            modelMatrix.rotate(rotationStep, 0, 0, 1.0f);
-            rotationVector.z += rotationStep;
-            rotCount += rotationStep;
-        }
-//        else
-//            positionVector.rotateZ(maxUpwardsRot);
+            positionVector.y += upwardsAcceleration;
+//            upwardsAcceleration -= 0.05f;
 
-//        modelMatrix.rotate(0.1f, 0f, 0f, 1.0f);
-//        rotCount += 0.1f;
-//        System.out.println(rotCount);
+            if (rotationVector.z() <= maxUpwardsRot)
+            {
+                rotationVector.z += (rotationStep * 4);
+            }
+        }
     }
 }

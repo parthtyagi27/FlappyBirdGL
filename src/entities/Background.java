@@ -3,7 +3,8 @@ package entities;
 
 import core.Main;
 import engine.*;
-import org.joml.Matrix4f;
+import math.Transformation;
+import org.joml.Vector3f;
 
 public class Background extends Entity
 {
@@ -21,7 +22,7 @@ public class Background extends Entity
 
 
         mesh = new Mesh(vertices, TextureAtlas.getBackgroundTexture());
-        modelMatrix = new Matrix4f();
+        positionVector = new Vector3f();
     }
 
     @Override
@@ -31,7 +32,7 @@ public class Background extends Entity
         TextureAtlas.texture.bind();
         Shader.backgroundShader.setUniform("sampler", 0);
         Shader.backgroundShader.setUniform("projection", camera.getProjectionMatrix());
-        Shader.backgroundShader.setUniform("model", modelMatrix);
+        Shader.backgroundShader.setUniform("model", Transformation.createTransformation(positionVector, rotationVector));
         Renderer.drawMesh(mesh);
         Shader.backgroundShader.unbind();
     }

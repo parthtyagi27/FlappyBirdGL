@@ -40,6 +40,6 @@ public class Background extends Entity
     @Override
     public void update()
     {
-
+        positionVector.x -= 2;
     }
 }

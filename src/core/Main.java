@@ -3,6 +3,7 @@ package core;
 import engine.*;
 import entities.Background;
 import entities.Bird;
+import entities.Level;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GL11;
@@ -18,6 +19,7 @@ public class Main
     private static Camera camera;
     private static Background bg;
     private static Bird bird;
+    private static Level level;
 
     public static void main(String[] args)
     {
@@ -76,12 +78,14 @@ public class Main
 
     private static void render()
     {
-        bg.render();
+//        bg.render();
+        level.render();
         bird.render();
     }
 
     private static void update()
     {
+        level.update();
         bird.update();
     }
 
@@ -97,6 +101,7 @@ public class Main
 
         camera = new Camera(WIDTH, HEIGHT);
         bg = new Background(camera);
+        level = new Level(camera);
         bird = new Bird(camera);
     }
 

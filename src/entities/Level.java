@@ -13,25 +13,37 @@ public class Level
         for(int i = 0; i < background.length; i++)
         {
             background[i] = new Background(camera);
-            background[i].positionVector.x = -Main.WIDTH + (i * Main.WIDTH);
+            background[i].positionVector.x = i * Main.WIDTH;
         }
-//        background[0]
     }
 
     public void render()
     {
-        for(int i = 0; i < background.length; i++)
+        for (Background bg : background)
         {
-            background[i].render();
+            bg.render();
         }
     }
 
     public void update()
     {
-        for(int i = 0; i < background.length; i++)
+        if (Bird.isAlive)
         {
-            background[i].update();
-        }
+            if (background[2].positionVector.x() <= 0)
+            {
+                background[0].positionVector.x = background[2].positionVector.x() + Main.WIDTH;
+                background[1].positionVector.x = background[0].positionVector.x() + Main.WIDTH;
 
+                Background b = background[0];
+                background[0] = background[1];
+                background[1] = background[2];
+                background[2] = b;
+            }
+
+            for (Background bg : background)
+            {
+                bg.update();
+            }
+        }
     }
 }

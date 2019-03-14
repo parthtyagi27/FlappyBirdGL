@@ -16,7 +16,7 @@ public class Bird extends Entity
 
     private static final float maxUpwardsRot = 30f, maxDownwardsRot = -60f;
     private static final float rotationStep = 1.5f;
-    private float downwardsAcceleration = 0.01f, upwardsAcceleration = 0.5f;
+    private float downwardsAcceleration = 0.05f, upwardsAcceleration = 0.5f;
     private static final float gravityConstant = 0.25f;
     private float targetY;
     private float angle;
@@ -27,14 +27,18 @@ public class Bird extends Entity
         super();
         float[] vertices =
                 {
-                        0, height, 0.1f,
-                        width, height, 0.1f,
-                        width, 0, 0.1f,
-                        0, 0, 0.1f
+//                        0, height, 0.1f,
+//                        width, height, 0.1f,
+//                        width, 0, 0.1f,
+//                        0, 0, 0.1f
+-width/2, height/2, 0.1f,
+width/2, height/2, 0.1f,
+width/2, -height/2, 0.1f,
+-width/2, -height/2, 0.1f
                 };
         mesh = new Mesh(vertices, TextureAtlas.getBirdTexture());
         this.camera = camera;
-        positionVector = new Vector3f((Main.WIDTH - width)/2, (Main.HEIGHT - height)/2, 0);
+        positionVector = new Vector3f((Main.WIDTH - width)/2 + width/2, (Main.HEIGHT - height)/2, 0);
         rotationVector = new Vector3f();
 
         angle = (float) Math.toDegrees(Math.asin((float) (height/(Math.sqrt(Math.pow(width, 2) + Math.pow(height, 2))))));
@@ -68,8 +72,6 @@ public class Bird extends Entity
             if(positionVector.y < Math.cos(Math.toRadians(rotationVector.z())))
                 isAlive = false;
 
-
-
 //            System.out.println("Bird Position = " + positionVector.y + " angle = " + rotationVector.z());
 //            System.out.println(Transformation.createTransformation(positionVector, rotationVector).m31());
         }
@@ -79,10 +81,10 @@ public class Bird extends Entity
     {
         upwardsAcceleration = 0.5f;
         positionVector.y -= (gravityConstant + downwardsAcceleration);
-        downwardsAcceleration += 0.05f;
+            downwardsAcceleration += 0.2f;
         if(rotationVector.z() >= maxDownwardsRot)
         {
-            rotationVector.z += -(rotationStep * 3);
+            rotationVector.z += -(rotationStep * downwardsAcceleration);
         }
         angle += rotationStep;
 
@@ -90,14 +92,15 @@ public class Bird extends Entity
 
     private void jump()
     {
+        downwardsAcceleration = 0.05f;
         if(positionVector.y <= targetY)
         {
             positionVector.y += upwardsAcceleration;
-            if(upwardsAcceleration <= 4f)
+            if(upwardsAcceleration <= 8f)
                 upwardsAcceleration += 0.5f;
             if (rotationVector.z() <= maxUpwardsRot)
             {
-                rotationVector.z += (rotationStep * 4);
+                rotationVector.z += (rotationStep * upwardsAcceleration);
             }
         }
     }

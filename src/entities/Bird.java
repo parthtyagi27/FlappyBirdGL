@@ -15,9 +15,9 @@ public class Bird extends Entity
     public static boolean isAlive = true;
 
     private static final float maxUpwardsRot = 30f, maxDownwardsRot = -60f;
-    private static final float rotationStep = 1f;
+    private static final float rotationStep = 1.5f;
     private float downwardsAcceleration = 0.01f, upwardsAcceleration = 0.5f;
-    private static final float gravityConstant = 0.5f;
+    private static final float gravityConstant = 0.25f;
     private float targetY;
     private float angle;
 
@@ -68,6 +68,8 @@ public class Bird extends Entity
             if(positionVector.y < Math.cos(Math.toRadians(rotationVector.z())))
                 isAlive = false;
 
+
+
 //            System.out.println("Bird Position = " + positionVector.y + " angle = " + rotationVector.z());
 //            System.out.println(Transformation.createTransformation(positionVector, rotationVector).m31());
         }
@@ -80,7 +82,7 @@ public class Bird extends Entity
         downwardsAcceleration += 0.05f;
         if(rotationVector.z() >= maxDownwardsRot)
         {
-            rotationVector.z += -(rotationStep * 1.25);
+            rotationVector.z += -(rotationStep * 3);
         }
         angle += rotationStep;
 

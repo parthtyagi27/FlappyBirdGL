@@ -17,7 +17,6 @@ public class Main
     private static double time, unprocessedTime = 0;
 
     private static Camera camera;
-    private static Background bg;
     private static Bird bird;
     private static Level level;
 
@@ -78,7 +77,6 @@ public class Main
 
     private static void render()
     {
-//        bg.render();
         level.render();
         bird.render();
     }
@@ -100,7 +98,6 @@ public class Main
         TextureAtlas.loadTextureAtlas("/res/test.png");
 
         camera = new Camera(WIDTH, HEIGHT);
-        bg = new Background(camera);
         level = new Level(camera);
         bird = new Bird(camera);
     }

@@ -72,6 +72,7 @@ width/2, -height/2, 0.1f,
             if(positionVector.y < Math.cos(Math.toRadians(rotationVector.z())))
                 isAlive = false;
 
+
 //            System.out.println("Bird Position = " + positionVector.y + " angle = " + rotationVector.z());
 //            System.out.println(Transformation.createTransformation(positionVector, rotationVector).m31());
         }

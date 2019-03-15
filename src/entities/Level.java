@@ -6,6 +6,7 @@ import engine.Camera;
 public class Level
 {
     private Background[] background;
+    private Pipe pipe;
 
     public Level(Camera camera)
     {
@@ -15,6 +16,8 @@ public class Level
             background[i] = new Background(camera);
             background[i].positionVector.x = i * Main.WIDTH;
         }
+
+        pipe = new Pipe(camera);
     }
 
     public void render()
@@ -23,6 +26,8 @@ public class Level
         {
             bg.render();
         }
+
+        pipe.render();
     }
 
     public void update()

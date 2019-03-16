@@ -8,6 +8,9 @@ import org.joml.Vector3f;
 
 public class Background extends Entity
 {
+
+    public static final float backgroundMovement = 1.5f;
+
     public Background(Camera camera)
     {
         super();
@@ -40,6 +43,6 @@ public class Background extends Entity
     @Override
     public void update()
     {
-        positionVector.x -= 2;
+        positionVector.x -= backgroundMovement;
     }
 }

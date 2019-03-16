@@ -7,14 +7,17 @@ import org.joml.Vector3f;
 public class Pipe extends Entity
 {
 
-    public static final float width = TextureAtlas.pipeWidth, height = 300f;
+    public static final float width = TextureAtlas.pipeWidth + 25;
+    private float height;
+    private boolean isFlipped = false;
 
-    public Pipe(Camera camera)
+    public Pipe(Camera camera, boolean isFlipped, float height)
     {
         super();
         this.camera = camera;
+        this.height = height;
 
-        positionVector = new Vector3f(100, 100, 0.2f);
+        positionVector = new Vector3f();
         rotationVector = new Vector3f();
 
         float[] verticies =
@@ -26,6 +29,12 @@ public class Pipe extends Entity
                 };
 
         mesh = new Mesh(verticies, TextureAtlas.getPipeTexture());
+        this.isFlipped = isFlipped;
+    }
+
+    public float getHeight()
+    {
+        return height;
     }
 
     @Override
@@ -35,7 +44,10 @@ public class Pipe extends Entity
         TextureAtlas.texture.bind();
         Shader.pipeShader.setUniform("sampler", 0);
         Shader.pipeShader.setUniform("projection", camera.getProjectionMatrix());
-        Shader.pipeShader.setUniform("model", Transformation.createTransformation(positionVector, rotationVector));
+        if(isFlipped)
+            Shader.pipeShader.setUniform("model", Transformation.createTransformation(positionVector, rotationVector).reflect(0, 1, 0, 0));
+        else
+            Shader.pipeShader.setUniform("model", Transformation.createTransformation(positionVector, rotationVector));
         Renderer.drawMesh(mesh);
         Shader.pipeShader.unbind();
     }
@@ -43,6 +55,6 @@ public class Pipe extends Entity
     @Override
     public void update()
     {
-
+        positionVector.x -= Background.backgroundMovement;
     }
 }

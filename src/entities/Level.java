@@ -3,10 +3,14 @@ package entities;
 import core.Main;
 import engine.Camera;
 
+import java.util.ArrayList;
+
 public class Level
 {
     private Background[] background;
     private Pipe pipe;
+    private PipeSet ps;
+    private ArrayList<PipeSet> pipes;
 
     public Level(Camera camera)
     {
@@ -17,7 +21,8 @@ public class Level
             background[i].positionVector.x = i * Main.WIDTH;
         }
 
-        pipe = new Pipe(camera);
+        pipes = new ArrayList<PipeSet>();
+        pipes.add(new PipeSet(camera));
     }
 
     public void render()
@@ -27,7 +32,10 @@ public class Level
             bg.render();
         }
 
-        pipe.render();
+        for(PipeSet pipeSet : pipes)
+        {
+            pipeSet.render();
+        }
     }
 
     public void update()
@@ -48,6 +56,11 @@ public class Level
             for (Background bg : background)
             {
                 bg.update();
+            }
+
+            for(PipeSet pipeSet : pipes)
+            {
+                pipeSet.update();
             }
         }
     }

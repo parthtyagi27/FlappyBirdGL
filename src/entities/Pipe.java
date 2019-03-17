@@ -9,7 +9,7 @@ public class Pipe extends Entity
 
     public static final float width = TextureAtlas.pipeWidth + 25;
     private float height;
-    private boolean isFlipped = false;
+    private boolean isFlipped;
 
     public Pipe(Camera camera, boolean isFlipped, float height)
     {
@@ -28,7 +28,7 @@ public class Pipe extends Entity
                         0, 0, 0f
                 };
 
-        mesh = new Mesh(verticies, TextureAtlas.getPipeTexture());
+        mesh = new Mesh(verticies, TextureAtlas.getPipeTexture(height));
         this.isFlipped = isFlipped;
     }
 

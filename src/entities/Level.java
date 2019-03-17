@@ -7,13 +7,15 @@ import java.util.ArrayList;
 
 public class Level
 {
+    private Camera camera;
     private Background[] background;
-    private Pipe pipe;
-    private PipeSet ps;
     private ArrayList<PipeSet> pipes;
+
+    private static float deltaPipeDistance = 200f;
 
     public Level(Camera camera)
     {
+        this.camera = camera;
         background = new Background[3];
         for(int i = 0; i < background.length; i++)
         {
@@ -57,11 +59,22 @@ public class Level
             {
                 bg.update();
             }
-
-            for(PipeSet pipeSet : pipes)
+            if(pipes.size() <= 3)
             {
-                pipeSet.update();
+                PipeSet pipeSet = new PipeSet(camera);
+                pipeSet.setX(pipes.get(pipes.size() - 1).getX() + Pipe.width + deltaPipeDistance);
+                pipes.add(pipeSet);
             }
+
+            for(int i = 0; i < pipes.size(); i++)
+            {
+                if(pipes.get(i).getX() <= -Pipe.width)
+                    pipes.remove(i);
+                else
+                    pipes.get(i).update();
+            }
+
+
         }
     }
 }

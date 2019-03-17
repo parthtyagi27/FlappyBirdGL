@@ -39,4 +39,14 @@ public class PipeSet
     }
 
 
+    public float getX()
+    {
+        return pipe1.positionVector.x();
+    }
+
+    public void setX(float x)
+    {
+        pipe1.positionVector.x = x;
+        pipe2.positionVector.x = x;
+    }
 }

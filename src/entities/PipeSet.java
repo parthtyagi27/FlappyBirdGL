@@ -2,6 +2,8 @@ package entities;
 
 import core.Main;
 import engine.Camera;
+import engine.Shader;
+import engine.TextureAtlas;
 
 import java.util.Random;
 
@@ -13,7 +15,7 @@ public class PipeSet
 
     public PipeSet(Camera camera)
     {
-        pipe1 = new Pipe(camera, false, random.nextInt(Main.HEIGHT - 175) + 75);
+        pipe1 = new Pipe(camera, false, random.nextInt(Main.HEIGHT - 200) + 100);
         pipe2 = new Pipe(camera, true, Main.HEIGHT - pipe1.getHeight());
 
         pipe1.positionVector.x = Main.WIDTH;

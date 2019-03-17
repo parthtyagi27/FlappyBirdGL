@@ -4,10 +4,13 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL15;
 import org.lwjgl.opengl.GL20;
 
+
 import java.util.List;
+
 
 public class Renderer
 {
+
     public static void drawMesh(Mesh mesh)
     {
         GL20.glEnableVertexAttribArray(0);

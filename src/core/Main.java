@@ -1,9 +1,10 @@
 package core;
 
 import engine.*;
-import entities.Background;
 import entities.Bird;
 import entities.Level;
+import font.FontMesh;
+import font.Text;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GL11;
@@ -19,6 +20,11 @@ public class Main
     private static Camera camera;
     private static Bird bird;
     private static Level level;
+
+    public static int score = 0;
+
+    private static FontMesh fontMesh;
+    private static Text scoreText;
 
     public static void main(String[] args)
     {
@@ -79,6 +85,7 @@ public class Main
     {
         level.render();
         bird.render();
+        scoreText.render(Shader.textShader, camera);
     }
 
     private static void update()
@@ -100,6 +107,9 @@ public class Main
         camera = new Camera(WIDTH, HEIGHT);
         level = new Level(camera);
         bird = new Bird(camera);
+        fontMesh = new FontMesh("/res/font.ttf", 16);
+        scoreText = new Text(fontMesh);
+        scoreText.loadText("Score = " + score);
     }
 
     private  static void flush()

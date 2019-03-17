@@ -13,7 +13,7 @@ public class Shader
 {
     private  int program, vertexShaderID, fragmentShaderID;
 
-    public static Shader backgroundShader, birdShader, pipeShader;
+    public static Shader backgroundShader, birdShader, pipeShader, textShader;
 
     public Shader(String filename)
     {
@@ -63,6 +63,7 @@ public class Shader
         backgroundShader = new Shader("/shaders/entity");
         birdShader = new Shader("/shaders/bird");
         pipeShader = new Shader("/shaders/pipe");
+        textShader = new Shader("/shaders/text");
     }
 
     public void setUniform(String name, int value)
@@ -109,6 +110,7 @@ public class Shader
         backgroundShader.delete();
         birdShader.delete();
         pipeShader.delete();
+        textShader.delete();
     }
 
     public void unbind()

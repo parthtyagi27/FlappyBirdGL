@@ -35,6 +35,19 @@ public class TextureAtlas
                 };
     }
 
+    public static float[] getPipeTexture(float h)
+    {
+        if(h > pipeHeight)
+            h = pipeHeight;
+        return new float[]
+                {
+                        ((pipeStartX)/atlasWidth), ((pipeStartY)/atlasHeight),
+                        ((pipeStartX + pipeWidth)/atlasWidth), ((pipeStartY)/atlasHeight),
+                        ((pipeStartX + pipeWidth)/atlasWidth), ((pipeStartY + h)/atlasHeight),
+                        ((pipeStartX)/atlasWidth), ((pipeStartY + h)/atlasHeight)
+                };
+    }
+
     public static float[] getBirdTexture()
     {
         return new float[]

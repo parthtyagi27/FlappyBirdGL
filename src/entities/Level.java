@@ -53,7 +53,7 @@ public class Level
             pipeSet.render();
     }
 
-    public void update()
+    public void update(Bird bird)
     {
         if (Bird.isAlive)
         {
@@ -87,7 +87,14 @@ public class Level
 //                    pipes.get(i).update();
 //            }
             for(PipeSet pipeSet : array)
+            {
                 pipeSet.update();
+                if(pipeSet.getX() + Pipe.width/2 <= bird.positionVector.x() && pipeSet.isPassedBird() == false)
+                {
+                    pipeSet.setPassedBird(true);
+                    Main.score++;
+                }
+            }
 
             if(array[0].getX() <= -Pipe.width)
             {
@@ -104,8 +111,6 @@ public class Level
                     }
                 }
             }
-
-
 
         }
     }

@@ -28,6 +28,16 @@ public class PipeSet
         System.out.println("Pipe 2 Height = " + pipe2.getHeight() + ", position = " + pipe2.positionVector.y());
     }
 
+    public Pipe getBottomPipe()
+    {
+        return pipe1;
+    }
+
+    public Pipe getTopPipe()
+    {
+        return pipe2;
+    }
+
     public void render()
     {
         pipe1.render();

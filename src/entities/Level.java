@@ -2,6 +2,7 @@ package entities;
 
 import core.Main;
 import engine.Camera;
+import javafx.scene.shape.TriangleMesh;
 
 import java.util.ArrayList;
 
@@ -57,6 +58,7 @@ public class Level
     {
         if (Bird.isAlive)
         {
+//            System.out.println("Bird pos = " + (bird.positionVector.x() + Bird.width/2)+ " Pipe 1 pos = " + array[0].getX());
             if (background[2].positionVector.x() <= 0)
             {
                 background[0].positionVector.x = background[2].positionVector.x() + Main.WIDTH;
@@ -89,6 +91,11 @@ public class Level
             for(PipeSet pipeSet : array)
             {
                 pipeSet.update();
+                if(checkCollision(bird, pipeSet))
+                {
+                    System.out.println("Collision!");
+                    Bird.isAlive = false;
+                }
                 if(pipeSet.getX() + Pipe.width/2 <= bird.positionVector.x() && pipeSet.isPassedBird() == false)
                 {
                     pipeSet.setPassedBird(true);
@@ -113,5 +120,30 @@ public class Level
             }
 
         }
+    }
+
+    private boolean checkCollision(Bird bird, PipeSet pipeSet)
+    {
+        // bird.x = 250
+//        if(pipeSet.getX() >= bird.positionVector.x() + Bird.width/2 && pipeSet.getX() <= bird.positionVector.x() + Pipe.width - Bird.width/2)
+//        if(pipeSet.getX() <= (250 + Bird.width/2) && (pipeSet.getX() + Pipe.width) >= (250 + Bird.width/2))
+        if(pipeSet.getX() + Pipe.width < 250 - Bird.width/2)
+            return false;
+        if(pipeSet.getX() <= (250 + Bird.width/2) && (pipeSet.getX() + Pipe.width) >= (250 - Bird.width/2))
+        {
+            //ToDo: Check if bird collides with the walls of the pipes
+            if(bird.positionVector.y() + Bird.height/2 >= Main.HEIGHT - pipeSet.getTopPipe().getHeight())
+            {
+                System.out.println("Hit Top pipe, bird = " + bird.positionVector.y + " pipe height = " + pipeSet.getTopPipe().getHeight());
+                return true;
+            }else if (bird.positionVector.y() + Bird.height/2 >= 0 && bird.positionVector.y() - Bird.height/2 <= pipeSet.getBottomPipe().getHeight() + pipeSet.getBottomPipe().positionVector.y())
+            {
+                System.out.println("Hit Bot pipe, bird = " + bird.positionVector.y + " pipe height = " + (pipeSet.getBottomPipe().getHeight() + pipeSet.getBottomPipe().positionVector.y()));
+                return true;
+            }
+
+//            System.out.println("Bottom Pipe Pos = " + pipeSet.getBottomPipe().getHeight() + "  bird pos = " + bird.positionVector.y());
+        }
+        return false;
     }
 }

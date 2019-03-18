@@ -12,6 +12,7 @@ public class PipeSet
     private static Random random = new Random();
     private Pipe pipe1, pipe2;
     public static final float deltaPipeHeight = 150f;
+    private boolean passedBird = false;
 
     public PipeSet(Camera camera)
     {
@@ -38,6 +39,16 @@ public class PipeSet
 //        System.out.println("Pipe 1 = " + pipe1.positionVector.y + " Pipe 2 = " + pipe2.positionVector.y);
         pipe1.update();
         pipe2.update();
+    }
+
+    public void setPassedBird(boolean value)
+    {
+        passedBird = value;
+    }
+
+    public boolean isPassedBird()
+    {
+        return passedBird;
     }
 
 

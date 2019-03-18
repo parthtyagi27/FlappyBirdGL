@@ -107,9 +107,11 @@ public class Main
         camera = new Camera(WIDTH, HEIGHT);
         level = new Level(camera);
         bird = new Bird(camera);
-        fontMesh = new FontMesh("/res/font.ttf", 16);
+        fontMesh = new FontMesh("/res/Prototype.ttf", 48);
         scoreText = new Text(fontMesh);
-        scoreText.loadText("Score = " + score);
+
+        scoreText.loadText(score + "");
+        scoreText.translate((Main.WIDTH - scoreText.getWidth())/2, Main.HEIGHT - scoreText.getHeight() - 10, 0);
     }
 
     private  static void flush()

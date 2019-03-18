@@ -90,8 +90,9 @@ public class Main
 
     private static void update()
     {
-        level.update();
+        level.update(bird);
         bird.update();
+        scoreText.loadText(score + "");
     }
 
     private static void init()

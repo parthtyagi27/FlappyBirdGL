@@ -30,6 +30,28 @@ public class Pipe extends Entity
 
         mesh = new Mesh(verticies, TextureAtlas.getPipeTexture(height));
         this.isFlipped = isFlipped;
+
+    }
+
+    public Pipe(Camera camera, boolean isFlipped)
+    {
+        super();
+        this.camera = camera;
+
+        positionVector = new Vector3f();
+        rotationVector = new Vector3f();
+
+        float[] verticies =
+                {
+                        0, height, 0f,
+                        width, height, 0f,
+                        width, 0, 0f,
+                        0, 0, 0f
+                };
+
+        mesh = new Mesh(verticies, TextureAtlas.getPipeTexture());
+        height = TextureAtlas.pipeHeight;
+        this.isFlipped = isFlipped;
     }
 
     public float getHeight()
@@ -55,6 +77,6 @@ public class Pipe extends Entity
     @Override
     public void update()
     {
-        positionVector.x -= Background.backgroundMovement;
+        positionVector.x -= (Background.backgroundMovement + 0.5f);
     }
 }

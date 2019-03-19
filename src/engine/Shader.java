@@ -11,8 +11,9 @@ import java.nio.FloatBuffer;
 
 public class Shader
 {
+//  Creates and manages Shader programs for OpenGL
     private  int program, vertexShaderID, fragmentShaderID;
-
+//  All Shaders are static so they can easily be used, also Shaders don't need to be instanced as it leads to redundancies
     public static Shader backgroundShader, birdShader, pipeShader, textShader;
 
     public Shader(String filename)

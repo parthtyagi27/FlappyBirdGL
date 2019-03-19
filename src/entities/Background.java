@@ -8,7 +8,7 @@ import org.joml.Vector3f;
 
 public class Background extends Entity
 {
-
+//  Single background which is used in the level class to create an infinite scrolling side effect
     public static final float backgroundMovement = 1.5f;
 
     public Background(Camera camera)

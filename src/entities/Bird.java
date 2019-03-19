@@ -10,7 +10,7 @@ import org.lwjgl.glfw.GLFW;
 
 public class Bird extends Entity
 {
-
+//  Encapsulates the Bird object
     public static final float width = TextureAtlas.birdWidth - 60, height = TextureAtlas.birdHeight - 40;
     public static boolean isAlive = true;
 
@@ -19,7 +19,6 @@ public class Bird extends Entity
     private float downwardsAcceleration = 0.05f, upwardsAcceleration = 0.5f;
     private static final float gravityConstant = 0.25f;
     private float targetY;
-    private float angle;
 
 
     public Bird(Camera camera)
@@ -27,21 +26,22 @@ public class Bird extends Entity
         super();
         float[] vertices =
                 {
+//                        Old Vertices
 //                        0, height, 0.1f,
 //                        width, height, 0.1f,
 //                        width, 0, 0.1f,
 //                        0, 0, 0.1f
--width/2, height/2, 0.1f,
-width/2, height/2, 0.1f,
-width/2, -height/2, 0.1f,
--width/2, -height/2, 0.1f
+//              New vertices which allow the bird to be rotated about its center rather than the lower left corner (realistic rotation)
+                        -width/2, height/2, 0.1f,
+                        width/2, height/2, 0.1f,
+                        width/2, -height/2, 0.1f,
+                        -width/2, -height/2, 0.1f
                 };
         mesh = new Mesh(vertices, TextureAtlas.getBirdTexture());
         this.camera = camera;
         positionVector = new Vector3f((Main.WIDTH - width)/2 + width/2, (Main.HEIGHT - height)/2, 0);
         rotationVector = new Vector3f();
 
-        angle = (float) Math.toDegrees(Math.asin((float) (height/(Math.sqrt(Math.pow(width, 2) + Math.pow(height, 2))))));
     }
 
     @Override
@@ -59,6 +59,7 @@ width/2, -height/2, 0.1f,
     @Override
     public void update()
     {
+//  Only update if the bird is alive to save resources
         if(isAlive)
         {
             if (Handler.isKeyDown(GLFW.GLFW_KEY_SPACE))
@@ -71,10 +72,6 @@ width/2, -height/2, 0.1f,
 
             if(positionVector.y < Math.cos(Math.toRadians(rotationVector.z())))
                 isAlive = false;
-
-
-//            System.out.println("Bird Position = " + positionVector.y + " angle = " + rotationVector.z());
-//            System.out.println(Transformation.createTransformation(positionVector, rotationVector).m31());
         }
     }
 
@@ -87,7 +84,6 @@ width/2, -height/2, 0.1f,
         {
             rotationVector.z += -(rotationStep * downwardsAcceleration);
         }
-        angle += rotationStep;
 
     }
 

@@ -1,10 +1,10 @@
 package engine;
 
-import org.joml.Matrix4f;
 import org.joml.Vector3f;
 
 public abstract class Entity
 {
+    //Parent class of all entity objects
     public Vector3f positionVector;
     public Vector3f rotationVector;
     public Mesh mesh;

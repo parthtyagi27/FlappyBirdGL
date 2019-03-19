@@ -2,6 +2,7 @@ package engine;
 
 public class TextureAtlas
 {
+//  Allows for objects to extract texture coordinates from a single texture atlas (more efficient)
     public static Texture texture;
 
     public static final float atlasWidth = 512f, atlasHeight = 512f;
@@ -9,10 +10,6 @@ public class TextureAtlas
     public static float birdWidth = 125f, birdHeight = 88f, birdStartX = 336f, birdStartY = 42f;
     public static float pipeWidth = 52f, pipeHeight = 320f, pipeStartX = 372f, pipeStartY = 192f;
 
-//    public TextureAtlas(String file)
-//    {
-//        texture = new Texture(file);
-//    }
 
     public static void loadTextureAtlas(String file)
     {

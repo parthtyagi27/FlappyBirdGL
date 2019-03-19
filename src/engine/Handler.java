@@ -4,6 +4,7 @@ import org.lwjgl.glfw.GLFW;
 
 public class Handler
 {
+    //Allows for key input in the program
     private static Window window;
 
     public static void loadHandler(Window win)

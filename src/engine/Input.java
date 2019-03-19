@@ -5,6 +5,7 @@ import org.lwjgl.glfw.GLFWKeyCallback;
 
 public class Input extends GLFWKeyCallback
 {
+    //Deprecated method of getting input for the program, I should probably delete this...
 
 //    @Override
     public String getSignature()

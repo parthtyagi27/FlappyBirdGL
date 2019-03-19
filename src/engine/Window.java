@@ -6,6 +6,7 @@ import org.lwjgl.opengl.GL11;
 
 public class Window
 {
+//  Represents a Window Object, all GLFW related
     private long windowID;
     private int width, height;
     private String title;

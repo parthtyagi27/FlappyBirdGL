@@ -8,7 +8,7 @@ public class Camera
 
     public Camera(int width, int height)
     {
-//        projectionMatrix = new Matrix4f().ortho2D(0, width, height, 0);
+//      Create the projection matrix for the game, since it's 2D we use an orthographic matrix
         projectionMatrix = new Matrix4f().ortho(0, width, 0, height, -1, 1);
     }
 

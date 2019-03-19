@@ -10,7 +10,7 @@ import java.util.List;
 
 public class Renderer
 {
-
+//  Renders all the models and arbitrary rectangles for testing purposes
     public static void drawMesh(Mesh mesh)
     {
         GL20.glEnableVertexAttribArray(0);

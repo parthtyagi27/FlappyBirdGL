@@ -2,8 +2,6 @@ package entities;
 
 import core.Main;
 import engine.Camera;
-import engine.Shader;
-import engine.TextureAtlas;
 
 import java.util.Random;
 
@@ -46,7 +44,6 @@ public class PipeSet
 
     public void update()
     {
-//        System.out.println("Pipe 1 = " + pipe1.positionVector.y + " Pipe 2 = " + pipe2.positionVector.y);
         pipe1.update();
         pipe2.update();
     }

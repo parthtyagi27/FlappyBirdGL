@@ -11,6 +11,7 @@ import java.nio.ByteBuffer;
 
 public class Texture
 {
+//  Represents a Texture in OpenGL
     private int id, width, height;
 
     public Texture(String name)

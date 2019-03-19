@@ -2,16 +2,13 @@ package entities;
 
 import core.Main;
 import engine.Camera;
-import javafx.scene.shape.TriangleMesh;
-
-import java.util.ArrayList;
 
 public class Level
 {
+//  Stores the background and PipeSet array which is constantly moving
     private Camera camera;
     private Background[] background;
-//    public static ArrayList<PipeSet> pipes;
-    public static PipeSet[] array;
+    public static PipeSet[] pipes;
 
     private static float deltaPipeDistance = 200f;
 
@@ -25,32 +22,27 @@ public class Level
             background[i].positionVector.x = i * Main.WIDTH;
         }
 
-//        pipes = new ArrayList<PipeSet>();
-//        pipes.add(new PipeSet(camera));
-        array = new PipeSet[4];
-        for(int i = 0; i < array.length; i++)
+        pipes = new PipeSet[4];
+//      Create pipes and set them a specific x distance away from each other (deltaPipeDistance)
+        for(int i = 0; i < pipes.length; i++)
         {
             PipeSet pipeSet = new PipeSet(camera);
             if(i != 0)
-                pipeSet.setX(array[i - 1].getX() + Pipe.width + deltaPipeDistance);
+                pipeSet.setX(pipes[i - 1].getX() + Pipe.width + deltaPipeDistance);
 
-            array[i] = pipeSet;
+            pipes[i] = pipeSet;
         }
     }
 
     public void render()
     {
+//  Update all background objects and PipeSet objects
         for (Background bg : background)
         {
             bg.render();
         }
 
-//        for(PipeSet pipeSet : pipes)
-//        {
-//            pipeSet.render();
-//        }
-
-        for(PipeSet pipeSet : array)
+        for(PipeSet pipeSet : pipes)
             pipeSet.render();
     }
 
@@ -58,12 +50,14 @@ public class Level
     {
         if (Bird.isAlive)
         {
-//            System.out.println("Bird pos = " + (bird.positionVector.x() + Bird.width/2)+ " Pipe 1 pos = " + array[0].getX());
+            //Recalibrate the background array if the background is "running out"
+//          background[2] is the last background object in the array
             if (background[2].positionVector.x() <= 0)
             {
+                //translate the other backgrounds so the background doesn't bleed
                 background[0].positionVector.x = background[2].positionVector.x() + Main.WIDTH;
                 background[1].positionVector.x = background[0].positionVector.x() + Main.WIDTH;
-
+                //restructure array so background objects are in order (0, 1, 2)
                 Background b = background[0];
                 background[0] = background[1];
                 background[1] = background[2];
@@ -74,21 +68,8 @@ public class Level
             {
                 bg.update();
             }
-//            if(pipes.size() <= 3)
-//            {
-//                PipeSet pipeSet = new PipeSet(camera);
-//                pipeSet.setX(Math.abs(pipes.get(pipes.size() - 1).getX()) + Pipe.width + deltaPipeDistance);
-//                pipes.add(pipeSet);
-//            }
-//
-//            for(int i = 0; i < pipes.size(); i++)
-//            {
-//                if(pipes.get(i).getX() <= -(Pipe.width + 10f))
-//                    pipes.remove(i);
-//                else
-//                    pipes.get(i).update();
-//            }
-            for(PipeSet pipeSet : array)
+
+            for(PipeSet pipeSet : pipes)
             {
                 pipeSet.update();
                 if(checkCollision(bird, pipeSet))
@@ -98,23 +79,26 @@ public class Level
                 }
                 if(pipeSet.getX() + Pipe.width/2 <= bird.positionVector.x() && pipeSet.isPassedBird() == false)
                 {
+//                  If bird passes through the pipe w/o collisions then award a point and make sure the pipeSet is flagged as behind the bird
                     pipeSet.setPassedBird(true);
                     Main.score++;
                 }
             }
-
-            if(array[0].getX() <= -Pipe.width)
+//          Check if the left most pipe (pipe[0]) is past the screen i.e. need to generate more pipes
+            if(pipes[0].getX() <= -Pipe.width)
             {
-                for(int i = 0; i < array.length; i++)
+                //iterate through the pipe array and shift the index of each pipeSet one to the right(+1) except the last pipeSet object (pipeset[length - 1])
+                for(int i = 0; i < pipes.length; i++)
                 {
-                    if(i < array.length - 1)
+                    if(i < pipes.length - 1)
                     {
-                        array[i] = array[i + 1];
+                        pipes[i] = pipes[i + 1];
                     }else
                     {
+                        //create a new pipeset object for the last pipe which is currently invisible
                         PipeSet pipeSet = new PipeSet(camera);
-                        pipeSet.setX(array[i - 1].getX() + Pipe.width + deltaPipeDistance);
-                        array[i] = pipeSet;
+                        pipeSet.setX(pipes[i - 1].getX() + Pipe.width + deltaPipeDistance);
+                        pipes[i] = pipeSet;
                     }
                 }
             }
@@ -124,25 +108,20 @@ public class Level
 
     private boolean checkCollision(Bird bird, PipeSet pipeSet)
     {
-        // bird.x = 250
-//        if(pipeSet.getX() >= bird.positionVector.x() + Bird.width/2 && pipeSet.getX() <= bird.positionVector.x() + Pipe.width - Bird.width/2)
-//        if(pipeSet.getX() <= (250 + Bird.width/2) && (pipeSet.getX() + Pipe.width) >= (250 + Bird.width/2))
+        // bird.x = 250, the bird's x coordinate never changes
         if(pipeSet.getX() + Pipe.width < 250 - Bird.width/2)
             return false;
         if(pipeSet.getX() <= (250 + Bird.width/2) && (pipeSet.getX() + Pipe.width) >= (250 - Bird.width/2))
         {
-            //ToDo: Check if bird collides with the walls of the pipes
-            if(bird.positionVector.y() + Bird.height/2 >= Main.HEIGHT - pipeSet.getTopPipe().getHeight())
+            if(bird.positionVector.y() + Bird.height/4 >= Main.HEIGHT - pipeSet.getTopPipe().getHeight())
             {
                 System.out.println("Hit Top pipe, bird = " + bird.positionVector.y + " pipe height = " + pipeSet.getTopPipe().getHeight());
                 return true;
-            }else if (bird.positionVector.y() + Bird.height/2 >= 0 && bird.positionVector.y() - Bird.height/2 <= pipeSet.getBottomPipe().getHeight() + pipeSet.getBottomPipe().positionVector.y())
+            }else if (bird.positionVector.y() + Bird.height/4 >= 0 && bird.positionVector.y() - Bird.height/4 <= pipeSet.getBottomPipe().getHeight() + pipeSet.getBottomPipe().positionVector.y())
             {
-                System.out.println("Hit Bot pipe, bird = " + bird.positionVector.y + " pipe height = " + (pipeSet.getBottomPipe().getHeight() + pipeSet.getBottomPipe().positionVector.y()));
+                System.out.println("Hit Bottom pipe, bird = " + bird.positionVector.y + " pipe height = " + (pipeSet.getBottomPipe().getHeight() + pipeSet.getBottomPipe().positionVector.y()));
                 return true;
             }
-
-//            System.out.println("Bottom Pipe Pos = " + pipeSet.getBottomPipe().getHeight() + "  bird pos = " + bird.positionVector.y());
         }
         return false;
     }

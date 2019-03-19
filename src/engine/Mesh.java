@@ -6,6 +6,8 @@ import org.lwjgl.opengl.GL15;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 
+//Mesh object, contains all vertex data for each entity
+
 public class Mesh
 {
     private int vertexCount, vertexID, textureID, indexID;

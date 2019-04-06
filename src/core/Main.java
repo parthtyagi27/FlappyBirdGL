@@ -9,8 +9,13 @@ import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GL11;
 
+
 public class Main
 {
+
+    private static String state = "menu";
+    private static UI ui;
+
     //Create window object
     private static Window window;
     //Window and game loop related variables
@@ -25,7 +30,7 @@ public class Main
     //Players score = the number of pipes the bird has maneuvered through
     public static int score = 0;
     //GUI related variables
-    private static FontMesh fontMesh;
+    private static FontMesh scoreFontMesh;
     private static Text scoreText;
 
     public static void main(String[] args)
@@ -88,15 +93,36 @@ public class Main
     private static void render()
     {
         level.render();
+        if(state == "game")
+        {
+            scoreText.render(Shader.textShader, camera);
+        }else if(state == "menu")
+        {
+            if(Handler.isKeyDown(GLFW.GLFW_KEY_SPACE))
+            {
+                state = "game";
+                ui.removeTextLabel("instruction");
+            }
+        }
         bird.render();
-        scoreText.render(Shader.textShader, camera);
+        ui.renderLabels();
     }
 
     private static void update()
     {
-        level.update(bird);
-        bird.update();
-        scoreText.loadText(score + "");
+        if(state == "game")
+        {
+            level.update(bird);
+            bird.update();
+            scoreText.loadText(score + "");
+        }
+//        if(Handler.isKeyDown(GLFW.GLFW_KEY_P))
+//        {
+//            if(Bird.isAlive)
+//                Bird.isAlive = false;
+//            else if(!Bird.isAlive)
+//                Bird.isAlive = true;
+//        }
     }
 
     private static void init()
@@ -112,11 +138,24 @@ public class Main
         camera = new Camera(WIDTH, HEIGHT);
         level = new Level(camera);
         bird = new Bird(camera);
-        fontMesh = new FontMesh("/res/Prototype.ttf", 48);
-        scoreText = new Text(fontMesh);
+
+        initGUI();
+    }
+
+    private static void initGUI()
+    {
+        scoreFontMesh = new FontMesh("/res/Prototype.ttf", 48);
+        scoreText = new Text(scoreFontMesh);
 
         scoreText.loadText(score + "");
         scoreText.translate((Main.WIDTH - scoreText.getWidth())/2, Main.HEIGHT - scoreText.getHeight() - 10, 0);
+        ui = new UI(Shader.textShader, camera);
+
+        Text instructionLabel = new Text(scoreFontMesh, 0.5f);
+        instructionLabel.loadText("Press spacebar to jump...");
+        instructionLabel.translate((Main.WIDTH - instructionLabel.getWidth())/2, (Main.HEIGHT - instructionLabel.getHeight())/2 +50, 0);
+        ui.addTextLabel("instruction", instructionLabel);
+        ui.addTextLabel("score", scoreText);
     }
 
     private  static void flush()

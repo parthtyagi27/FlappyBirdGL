@@ -11,6 +11,7 @@ public class Text
     private FontMesh fontMesh;
     private Texture fontTexture;
     private Map<Character, CharInfo> map;
+    private float meshScale;
     public static final int[] indicies = new int[]
             {
                     0,1,2,
@@ -29,6 +30,18 @@ public class Text
 
         modelList = new ArrayList<Mesh>();
         matrix = new Matrix4f();
+        meshScale = 1;
+    }
+
+    public Text(FontMesh mesh, float scale)
+    {
+        fontMesh = mesh;
+        fontTexture = fontMesh.getTexture();
+        map = fontMesh.getCharMap();
+
+        modelList = new ArrayList<Mesh>();
+        matrix = new Matrix4f();
+        meshScale = scale;
     }
 
     public void loadText(String text)
@@ -41,10 +54,10 @@ public class Text
 //			System.out.println(charInfo.getStartX() + " " + charInfo.getWidth() +  " " + fontMesh.getWidth());
             float[] verticies =
                     {
-                            0 + startX, fontMesh.getHeight(), 0.3f,
-                            charInfo.getWidth() + startX, fontMesh.getHeight(), 0.3f,
-                            charInfo.getWidth() + startX, 0, 0.3f,
-                            0 + startX, 0, 0.3f
+                            (0 + startX) * meshScale, fontMesh.getHeight() * meshScale, 0.3f,
+                            (charInfo.getWidth() + startX) * meshScale, fontMesh.getHeight() * meshScale, 0.3f,
+                            (charInfo.getWidth() + startX) * meshScale, 0, 0.3f,
+                            (0 + startX) * meshScale, 0, 0.3f
                     };
             //character coordinates for debugging
 //			System.out.println((float)((float)charInfo.getStartX() / (float)fontMesh.getWidth()));
@@ -61,7 +74,7 @@ public class Text
 
             modelList.add(new Mesh(verticies, tex));
             startX += charInfo.getWidth();
-            width += charInfo.getWidth();
+            width += charInfo.getWidth() * meshScale;
         }
     }
 
@@ -95,4 +108,5 @@ public class Text
         }
         shader.unbind();
     }
+
 }

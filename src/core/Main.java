@@ -13,7 +13,7 @@ import org.lwjgl.opengl.GL11;
 public class Main
 {
 
-    private static String state = "menu";
+    public static String state = "menu";
     private static UI ui;
 
     //Create window object
@@ -43,7 +43,9 @@ public class Main
         GLFW.glfwMakeContextCurrent(window.getWindowID());
         GL.createCapabilities();
         System.out.println("OpenGL Version: " + GL11.glGetString(GL11.GL_VERSION));
-        //Init game objects and load resources like Shaders and Textures
+        //Init GL code
+        initGL();
+        //Init game objects
         init();
 
         //Game loop
@@ -93,39 +95,46 @@ public class Main
     private static void render()
     {
         level.render();
+        bird.render();
         if(state == "game")
         {
             scoreText.render(Shader.textShader, camera);
         }else if(state == "menu")
         {
+            ui.renderLabel("instruction");
             if(Handler.isKeyDown(GLFW.GLFW_KEY_SPACE))
             {
                 state = "game";
-                ui.removeTextLabel("instruction");
+//                ui.removeTextLabel("instruction");
+                ui.addTextLabel("score", scoreText);
             }
+        }else if(state == "over")
+        {
+
+            ui.renderLabel("gameOver");
         }
-        bird.render();
-        ui.renderLabels();
     }
 
     private static void update()
     {
+        if(Bird.isAlive == false)
+            state = "over";
         if(state == "game")
         {
             level.update(bird);
             bird.update();
             scoreText.loadText(score + "");
+        }else if(state == "over")
+        {
+            if(Handler.isKeyDown(GLFW.GLFW_KEY_ENTER))
+            {
+                init();
+                state = "menu";
+            }
         }
-//        if(Handler.isKeyDown(GLFW.GLFW_KEY_P))
-//        {
-//            if(Bird.isAlive)
-//                Bird.isAlive = false;
-//            else if(!Bird.isAlive)
-//                Bird.isAlive = true;
-//        }
     }
 
-    private static void init()
+    private static void initGL()
     {
         GLFW.glfwSetKeyCallback(window.getWindowID(), new Input());
         GL11.glEnable(GL11.GL_TEXTURE_2D);
@@ -134,17 +143,23 @@ public class Main
         Shader.loadShaders();
         Handler.loadHandler(window);
         TextureAtlas.loadTextureAtlas("/res/test.png");
+    }
 
+    private static void init()
+    {
         camera = new Camera(WIDTH, HEIGHT);
         level = new Level(camera);
         bird = new Bird(camera);
+
+        Bird.isAlive = true;
+        score = 0;
 
         initGUI();
     }
 
     private static void initGUI()
     {
-        scoreFontMesh = new FontMesh("/res/Prototype.ttf", 48);
+        scoreFontMesh = new FontMesh("/res/font.ttf", 48);
         scoreText = new Text(scoreFontMesh);
 
         scoreText.loadText(score + "");
@@ -155,7 +170,11 @@ public class Main
         instructionLabel.loadText("Press spacebar to jump...");
         instructionLabel.translate((Main.WIDTH - instructionLabel.getWidth())/2, (Main.HEIGHT - instructionLabel.getHeight())/2 +50, 0);
         ui.addTextLabel("instruction", instructionLabel);
-        ui.addTextLabel("score", scoreText);
+
+        Text gameOverLabel = new Text(scoreFontMesh, 0.5f);
+        gameOverLabel.loadText("Press enter to play again");
+        gameOverLabel.translate((Main.WIDTH - gameOverLabel.getWidth())/2, (Main.HEIGHT - gameOverLabel.getHeight())/2 +50, 0);
+        ui.addTextLabel("gameOver", gameOverLabel);
     }
 
     private  static void flush()

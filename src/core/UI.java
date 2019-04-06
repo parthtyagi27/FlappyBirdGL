@@ -57,6 +57,11 @@ public class UI
         return textLabel.get(key).getHeight();
     }
 
+    public void renderLabel(String key)
+    {
+        textLabel.get(key).render(shader, camera);
+    }
+
     public void renderLabels()
     {
         if(!textLabel.isEmpty())
@@ -67,6 +72,11 @@ public class UI
             }
         }else
             System.out.println("UI Label Map is empty ... nothing to render");
+    }
+
+    public Text getLabel(String key)
+    {
+        return textLabel.get(key);
     }
 
     public void removeTextLabel(String key)

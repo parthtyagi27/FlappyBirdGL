@@ -38,6 +38,7 @@ public class Main
         //Init and render the window object
         window.setCallBack();
         window = new Window(WIDTH, HEIGHT, "FlappyGL", false);
+        window.setIcon("/res/icon.png");
         window.render();
         //Init OpenGL
         GLFW.glfwMakeContextCurrent(window.getWindowID());
@@ -159,7 +160,7 @@ public class Main
 
     private static void initGUI()
     {
-        scoreFontMesh = new FontMesh("/res/font.ttf", 48);
+        scoreFontMesh = new FontMesh("/res/apex.otf", 48);
         scoreText = new Text(scoreFontMesh);
 
         scoreText.loadText(score + "");
@@ -167,7 +168,7 @@ public class Main
         ui = new UI(Shader.textShader, camera);
 
         Text instructionLabel = new Text(scoreFontMesh, 0.5f);
-        instructionLabel.loadText("Press spacebar to jump...");
+        instructionLabel.loadText("Press space bar to jump");
         instructionLabel.translate((Main.WIDTH - instructionLabel.getWidth())/2, (Main.HEIGHT - instructionLabel.getHeight())/2 +50, 0);
         ui.addTextLabel("instruction", instructionLabel);
 

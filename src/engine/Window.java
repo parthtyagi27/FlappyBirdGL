@@ -1,5 +1,6 @@
 package engine;
 
+import font.Text;
 import org.lwjgl.glfw.*;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GL11;
@@ -11,6 +12,8 @@ public class Window
     private int width, height;
     private String title;
     private final boolean resizable;
+
+    private GLFWImage.Buffer iconBuffer = null;
 
     public Window(int width, int height, String title, boolean resizable)
     {
@@ -74,7 +77,13 @@ public class Window
 
         GLFWVidMode videoMode = GLFW.glfwGetVideoMode(GLFW.glfwGetPrimaryMonitor());
         GLFW.glfwSetWindowPos(windowID, (videoMode.width() - width)/2, (videoMode.height() - height)/2);
+
+        if(iconBuffer != null)
+        {
+            GLFW.glfwSetWindowIcon(windowID, iconBuffer);
+        }
     }
+
 
     public void setInput(Input input)
     {
@@ -89,6 +98,19 @@ public class Window
     public void update()
     {
         GLFW.glfwPollEvents();
+    }
+
+    public void setIcon(String path)
+    {
+        Image icon = new Image(path);
+
+        GLFWImage iconImage = GLFWImage.malloc();
+        iconBuffer = GLFWImage.malloc(1);
+        iconImage.set(icon.getWidth(), icon.getHeight(), icon.getPixels());
+
+        iconBuffer.put(0, iconImage);
+
+//        GLFW.glfwSetWindowIcon(windowID, iconBuffer);
     }
 
     protected void setResizable(boolean resizable)

@@ -13,6 +13,7 @@ public class Texture
 {
 //  Represents a Texture in OpenGL
     private int id, width, height;
+    private ByteBuffer p;
 
     public Texture(String name)
     {
@@ -27,7 +28,7 @@ public class Texture
             rawPixels = bufferedImage.getRGB(0, 0, width, height, null, 0, width);
 
             ByteBuffer pixels = BufferUtils.createByteBuffer(width * height * 4);
-
+            p = pixels;
             for(int i = 0; i < width; i++)
             {
                 for(int j = 0; j < height; j++)
@@ -161,5 +162,20 @@ public class Texture
             GL13.glActiveTexture(GL13.GL_TEXTURE0 + sampler);
             GL11.glBindTexture(GL11.GL_TEXTURE_2D, id);
         }
+    }
+
+    public ByteBuffer getPixels()
+    {
+        return p;
+    }
+
+    public int getWidth()
+    {
+        return width;
+    }
+
+    public int getHeight()
+    {
+        return height;
     }
 }

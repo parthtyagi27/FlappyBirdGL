@@ -3,6 +3,8 @@ package core;
 import engine.*;
 import entities.Bird;
 import entities.Level;
+import experimental.FontTexture;
+import experimental.Label;
 import font.FontMesh;
 import font.Text;
 import org.lwjgl.glfw.GLFW;
@@ -15,6 +17,7 @@ public class Main
 
     public static String state = "menu";
     private static UI ui;
+    private static Label label;
 
     //Create window object
     private static Window window;
@@ -114,6 +117,7 @@ public class Main
 
             ui.renderLabel("gameOver");
         }
+//        label.render(Shader.textShader, camera);
     }
 
     private static void update()
@@ -156,6 +160,14 @@ public class Main
         score = 0;
 
         initGUI();
+
+        //Experimental code
+//        FontTexture ft = new FontTexture("/res/font.png");
+//        ft.parseFontData("/res/test.fnt");
+//
+//        label = new Label(ft, 0.25f);
+//        label.loadText("PRESS SPACE BAR TO JUMP");
+//        label.translate(100, 100, 0);
     }
 
     private static void initGUI()
@@ -178,7 +190,7 @@ public class Main
         ui.addTextLabel("gameOver", gameOverLabel);
     }
 
-    private  static void flush()
+    private static void flush()
     {
         Shader.deleteAll();
         window.flush();

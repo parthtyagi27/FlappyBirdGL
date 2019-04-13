@@ -6,6 +6,7 @@ import math.Transformation;
 import org.joml.Vector3f;
 import org.lwjgl.glfw.GLFW;
 
+import java.util.Random;
 
 
 public class Bird extends Entity
@@ -19,7 +20,8 @@ public class Bird extends Entity
     private float downwardsAcceleration = 0.05f, upwardsAcceleration = 0.5f;
     private static final float gravityConstant = 0.25f;
     private float targetY;
-
+    private float hoverMax = (float) Main.HEIGHT /2f + 10f, hoverMin = (float) Main.HEIGHT/2f - 10f, hoverSpeed = .75f;
+    private boolean hoveringUp;
 
     public Bird(Camera camera)
     {
@@ -41,7 +43,7 @@ public class Bird extends Entity
         this.camera = camera;
         positionVector = new Vector3f((Main.WIDTH - width)/2 + width/2, (Main.HEIGHT - height)/2, 0);
         rotationVector = new Vector3f();
-
+        hoveringUp = new Random().nextBoolean();
     }
 
     @Override
@@ -69,9 +71,13 @@ public class Bird extends Entity
             }
             else
                 fall();
-
+//
+//            System.out.println(Transformation.createTransformation(positionVector, rotationVector).toString());
+//            System.out.println(Transformation.createTransformation(positionVector, rotationVector).m31());
             if(positionVector.y < Math.cos(Math.toRadians(rotationVector.z())))
                 isAlive = false;
+//            if(positionVector.y < width * Math.sin(Math.toRadians(rotationVector.z)) + height)
+
         }
     }
 
@@ -101,4 +107,28 @@ public class Bird extends Entity
             }
         }
     }
+
+    public void hover()
+    {
+        if(hoveringUp)
+        {
+            //Bird hovers above
+            if(positionVector.y() < hoverMax)
+                positionVector.y += hoverSpeed;
+            else
+                hoveringUp = false;
+        }
+
+        if(!hoveringUp)
+        {
+            //Bird hovers below
+            if(positionVector.y() > hoverMin)
+                positionVector.y -= hoverSpeed;
+            else
+                hoveringUp = true;
+        }
+
+
+    }
+
 }

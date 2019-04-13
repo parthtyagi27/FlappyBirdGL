@@ -1,13 +1,10 @@
-package experimental;
+package bitmapFonts;
 
 import engine.Camera;
 import engine.Mesh;
 import engine.Renderer;
 import engine.Shader;
-import font.Text;
-import math.Transformation;
 import org.joml.Matrix4f;
-import org.joml.Vector3f;
 
 import java.util.ArrayList;
 import java.util.Map;

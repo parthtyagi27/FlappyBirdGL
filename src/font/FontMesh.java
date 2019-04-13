@@ -7,10 +7,7 @@ import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
-import java.io.BufferedInputStream;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetEncoder;
 import java.util.HashMap;
@@ -18,6 +15,8 @@ import java.util.Map;
 
 import engine.*;
 import org.joml.Matrix4f;
+
+import javax.imageio.ImageIO;
 
 public class FontMesh
 {
@@ -75,7 +74,10 @@ public class FontMesh
 
 //		try
 //		{
-//			ImageIO.write(image, "png", new File("/res/test.png"));
+//		    File test = new File("C:\\Users\\Parth\\Desktop\\test.png");
+//		    if(!test.exists())
+//		        test.createNewFile();
+//			ImageIO.write(image, "png",test);
 //		} catch (IOException e)
 //		{
 //			// TODO Auto-generated catch block

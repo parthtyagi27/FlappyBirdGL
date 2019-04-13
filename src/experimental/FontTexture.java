@@ -15,19 +15,24 @@ public class FontTexture
 
     private Map<Character, Glyph> glyphMap;
     private static String[] limiters = {"id=", "x=", "y=", "width=", "height=", "xoffset=", "yoffset=", "xadvance="};
+    private float padding = 0;
 
     public FontTexture(String path)
     {
-        fontTexture = new Texture(path);
+        fontTexture = new Texture(path + ".png");
         glyphMap = new HashMap<Character, Glyph>();
+        parseFontData(path + ".fnt");
     }
 
-    public void parseFontData(String path)
+    private void parseFontData(String path)
     {
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream(path)));
         try
         {
-            bufferedReader.readLine();
+            String firstLine = bufferedReader.readLine();
+            String[] firstSplit = firstLine.split("padding=");
+            padding = Float.parseFloat(firstSplit[1].charAt(0) + "");
+            System.out.println("Padding = " + padding);
             bufferedReader.readLine();
             bufferedReader.readLine();
             String line = bufferedReader.readLine();
@@ -49,7 +54,7 @@ public class FontTexture
                         {
                             String[] pair = s.split(l);
                             values[i] = Integer.parseInt(pair[1]);
-                            System.out.println(l + values[i]);
+//                            System.out.println(l + values[i]);
                         }
                     }
                 }
@@ -87,5 +92,10 @@ public class FontTexture
     public float getMaxHeight()
     {
         return maxHeight;
+    }
+
+    public float getPadding()
+    {
+        return padding;
     }
 }

@@ -66,10 +66,10 @@ public class Text
 //			System.out.println((float)(charInfo.getStartX() / fontMesh.getWidth()));
             float[] tex =
                     {
-                            (float)((float)charInfo.getStartX() / (float)fontMesh.getWidth()), 0,
-                            (float)((float)(charInfo.getStartX() + (float)charInfo.getWidth()) / (float)fontMesh.getWidth()), 0,
-                            (float)((float)(charInfo.getStartX() +(float) charInfo.getWidth()) / (float)fontMesh.getWidth()), 1,
-                            (float)((float)charInfo.getStartX() / (float)fontMesh.getWidth()), 1
+                            (float)charInfo.getStartX() / (float)fontMesh.getWidth(), 0,
+                            (charInfo.getStartX() + (float)charInfo.getWidth()) / (float)fontMesh.getWidth(), 0,
+                            (charInfo.getStartX() +(float) charInfo.getWidth()) / (float)fontMesh.getWidth(), 1,
+                            (float)charInfo.getStartX() / (float)fontMesh.getWidth(), 1
                     };
 
             modelList.add(new Mesh(verticies, tex));

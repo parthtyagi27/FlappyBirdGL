@@ -3,8 +3,8 @@ package core;
 import engine.*;
 import entities.Bird;
 import entities.Level;
-import experimental.FontTexture;
-import experimental.Label;
+import bitmapFonts.FontTexture;
+import bitmapFonts.Label;
 import font.FontMesh;
 import font.Text;
 import org.lwjgl.glfw.GLFW;
@@ -17,7 +17,8 @@ public class Main
 
     public static String state = "menu";
     private static UI ui;
-    private static Label label;
+//    private static Label instructionLabel;
+//    private static Label scoreLabel;
 
     //Create window object
     private static Window window;
@@ -33,7 +34,6 @@ public class Main
     //Players score = the number of pipes the bird has maneuvered through
     public static int score = 0;
     //GUI related variables
-    private static FontMesh scoreFontMesh;
     private static Text scoreText;
 
     public static void main(String[] args)
@@ -117,12 +117,12 @@ public class Main
 
             ui.renderLabel("gameOver");
         }
-//        label.render(Shader.textShader, camera);
+//        instructionLabel.render(Shader.textShader, camera);
     }
 
     private static void update()
     {
-        if(Bird.isAlive == false)
+        if(!Bird.isAlive)
             state = "over";
         if(state == "game")
         {
@@ -136,7 +136,9 @@ public class Main
                 init();
                 state = "menu";
             }
-        }
+        }else if(state == "menu")
+            bird.hover();
+
     }
 
     private static void initGL()
@@ -160,34 +162,36 @@ public class Main
         score = 0;
 
         initGUI();
-
-        //Experimental code
-//        FontTexture ft = new FontTexture("/res/font.png");
-//        ft.parseFontData("/res/test.fnt");
-//
-//        label = new Label(ft, 0.25f);
-//        label.loadText("PRESS SPACE BAR TO JUMP");
-//        label.translate(100, 100, 0);
     }
 
     private static void initGUI()
     {
-        scoreFontMesh = new FontMesh("/res/apex.otf", 48);
-        scoreText = new Text(scoreFontMesh);
+        FontMesh fontMesh = new FontMesh("/res/apex.otf", 64);
+        scoreText = new Text(fontMesh);
 
         scoreText.loadText(score + "");
         scoreText.translate((Main.WIDTH - scoreText.getWidth())/2, Main.HEIGHT - scoreText.getHeight() - 10, 0);
         ui = new UI(Shader.textShader, camera);
 
-        Text instructionLabel = new Text(scoreFontMesh, 0.5f);
+        Text instructionLabel = new Text(fontMesh, .5f);
         instructionLabel.loadText("Press space bar to jump");
-        instructionLabel.translate((Main.WIDTH - instructionLabel.getWidth())/2, (Main.HEIGHT - instructionLabel.getHeight())/2 +50, 0);
+        instructionLabel.translate((Main.WIDTH - instructionLabel.getWidth())/2, (Main.HEIGHT - instructionLabel.getHeight())/2 + 150, 0);
         ui.addTextLabel("instruction", instructionLabel);
 
-        Text gameOverLabel = new Text(scoreFontMesh, 0.5f);
+        Text gameOverLabel = new Text(fontMesh, .5f);
         gameOverLabel.loadText("Press enter to play again");
         gameOverLabel.translate((Main.WIDTH - gameOverLabel.getWidth())/2, (Main.HEIGHT - gameOverLabel.getHeight())/2 +50, 0);
         ui.addTextLabel("gameOver", gameOverLabel);
+
+        //Experimental code
+//        FontTexture apex24 = new FontTexture("/res/fonts/apex24");
+//        FontTexture apex64 = new FontTexture("/res/fonts/apex64");
+//
+//        instructionLabel = new Label("Press Space to Jump...", apex24, 1f);
+//        instructionLabel.translate(25 , 100, 0);
+//        //(WIDTH - instructionLabel.getWidth()) / 2
+//
+//        scoreLabel = new Label(score + "", apex64 , 1.0f);
     }
 
     private static void flush()

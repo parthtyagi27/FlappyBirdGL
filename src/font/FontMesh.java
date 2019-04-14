@@ -34,6 +34,7 @@ public class FontMesh
         {
             InputStream is = new BufferedInputStream(getClass().getResourceAsStream(path));
             font = Font.createFont(Font.TRUETYPE_FONT, is).deriveFont(size);
+            is.close();
         } catch (FontFormatException e)
         {
             // TODO Auto-generated catch block
@@ -74,17 +75,17 @@ public class FontMesh
 
 //		try
 //		{
-//		    File test = new File("C:\\Users\\Parth\\Desktop\\test.png");
+//		    File test = new File("C:\\Users\\Parth\\Desktop\\textureAtlas.png");
 //		    if(!test.exists())
 //		        test.createNewFile();
 //			ImageIO.write(image, "png",test);
 //		} catch (IOException e)
 //		{
-//			// TODO Auto-generated catch block
 //			e.printStackTrace();
 //		}
 
         texture = new Texture(image);
+        image.flush();
     }
 
     public Texture getTexture()

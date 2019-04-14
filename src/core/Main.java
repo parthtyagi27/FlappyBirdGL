@@ -3,8 +3,6 @@ package core;
 import engine.*;
 import entities.Bird;
 import entities.Level;
-import bitmapFonts.FontTexture;
-import bitmapFonts.Label;
 import font.FontMesh;
 import font.Text;
 import org.lwjgl.glfw.GLFW;
@@ -149,7 +147,7 @@ public class Main
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
         Shader.loadShaders();
         Handler.loadHandler(window);
-        TextureAtlas.loadTextureAtlas("/res/test.png");
+        TextureAtlas.loadTextureAtlas("/res/textureAtlas.png");
     }
 
     private static void init()
@@ -166,7 +164,7 @@ public class Main
 
     private static void initGUI()
     {
-        FontMesh fontMesh = new FontMesh("/res/apex.otf", 64);
+        FontMesh fontMesh = new FontMesh("/res/fonts/gameFont.ttf", 64);
         scoreText = new Text(fontMesh);
 
         scoreText.loadText(score + "");
@@ -174,12 +172,12 @@ public class Main
         ui = new UI(Shader.textShader, camera);
 
         Text instructionLabel = new Text(fontMesh, .5f);
-        instructionLabel.loadText("Press space bar to jump");
+        instructionLabel.loadText("PRESS SPACE BAR TO JUMP");
         instructionLabel.translate((Main.WIDTH - instructionLabel.getWidth())/2, (Main.HEIGHT - instructionLabel.getHeight())/2 + 150, 0);
         ui.addTextLabel("instruction", instructionLabel);
 
         Text gameOverLabel = new Text(fontMesh, .5f);
-        gameOverLabel.loadText("Press enter to play again");
+        gameOverLabel.loadText("PRESS ENTER TO PLAY AGAIN");
         gameOverLabel.translate((Main.WIDTH - gameOverLabel.getWidth())/2, (Main.HEIGHT - gameOverLabel.getHeight())/2 +50, 0);
         ui.addTextLabel("gameOver", gameOverLabel);
 

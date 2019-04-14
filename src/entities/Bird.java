@@ -71,12 +71,9 @@ public class Bird extends Entity
             }
             else
                 fall();
-//
-//            System.out.println(Transformation.createTransformation(positionVector, rotationVector).toString());
-//            System.out.println(Transformation.createTransformation(positionVector, rotationVector).m31());
-            if(positionVector.y < Math.cos(Math.toRadians(rotationVector.z())))
+
+            if(positionVector.y() + height <= height*2 + 0.5 * Math.sin(Math.toRadians(rotationVector.z())) * width)
                 isAlive = false;
-//            if(positionVector.y < width * Math.sin(Math.toRadians(rotationVector.z)) + height)
 
         }
     }

@@ -160,6 +160,8 @@ public class Main
         score = 0;
 
         initGUI();
+
+        AudioManager.init();
     }
 
     private static void initGUI()
@@ -196,6 +198,7 @@ public class Main
     {
         Shader.deleteAll();
         window.flush();
+        AudioManager.flush();
         GL.destroy();
         GLFW.glfwTerminate();
         System.out.println("Disposed Resources");

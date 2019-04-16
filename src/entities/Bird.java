@@ -73,8 +73,10 @@ public class Bird extends Entity
                 fall();
 
             if(positionVector.y() + height <= height*2 + 0.5 * Math.sin(Math.toRadians(rotationVector.z())) * width)
+            {
                 isAlive = false;
-
+                AudioManager.play("dead");
+            }
         }
     }
 

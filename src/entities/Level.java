@@ -1,6 +1,8 @@
 package entities;
 
 import core.Main;
+import engine.Audio;
+import engine.AudioManager;
 import engine.Camera;
 
 public class Level
@@ -9,6 +11,7 @@ public class Level
     private Camera camera;
     private Background[] background;
     public static PipeSet[] pipes;
+    private Audio audio;
 
     private static float deltaPipeDistance = 200f;
 
@@ -32,6 +35,8 @@ public class Level
 
             pipes[i] = pipeSet;
         }
+
+        audio = new Audio("/res/audio/score.wav");
     }
 
     public void render()
@@ -77,10 +82,12 @@ public class Level
                     System.out.println("Collision!");
                     Bird.isAlive = false;
                 }
-                if(pipeSet.getX() + Pipe.width/2 <= bird.positionVector.x() && pipeSet.isPassedBird() == false)
+                if(pipeSet.getX() + Pipe.width/2 <= bird.positionVector.x() && !pipeSet.isPassedBird())
                 {
 //                  If bird passes through the pipe w/o collisions then award a point and make sure the pipeSet is flagged as behind the bird
                     pipeSet.setPassedBird(true);
+//                    audio.play();
+                    AudioManager.play(AudioManager.loadAudio("/res/audio/score.wav"));
                     Main.score++;
                 }
             }
@@ -125,4 +132,5 @@ public class Level
         }
         return false;
     }
+
 }

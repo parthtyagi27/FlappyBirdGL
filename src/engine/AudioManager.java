@@ -18,32 +18,9 @@ import java.util.Map;
 
 public class AudioManager
 {
-    private Map<String, Audio> audioFiles;
-    private Thread playBackThread;
+    private static Map<String, Integer> bufferPointers;
     private static long context, device;
-    private static ArrayList<Integer> buffers = new ArrayList<Integer>();
-
-    public AudioManager()
-    {
-        audioFiles = new HashMap<String, Audio>();
-        playBackThread = new Thread(new Runnable()
-        {
-            @Override
-            public void run()
-            {
-
-            }
-        });
-    }
-
-    public void addAudio(String key, Audio audio)
-    {
-        audioFiles.put(key, audio);
-    }
-
-    public void playAudio(String key)
-    {
-    }
+    private static int source;
 
     public static void init()
     {
@@ -54,14 +31,21 @@ public class AudioManager
         ALC10.alcMakeContextCurrent(context);
         ALCCapabilities alcCapabilities = ALC.createCapabilities(device);
         ALCapabilities  alCapabilities  = AL.createCapabilities(alcCapabilities);
+        source = AL10.alGenSources();
+
+        bufferPointers = new HashMap<String, Integer>();
     }
 
-    public static int loadAudio(String path)
+    public static void loadAudio(String path, String key)
     {
-//        path = AudioManager.class.getResource(path).toString();
-        System.out.println(path);
+        if(bufferPointers.containsKey(key))
+        {
+            System.err.println("Audio with key: " + key + " already exists...");
+            return;
+        }
         WaveData waveFile = WaveData.create(path);
         int buffer = AL10.alGenBuffers();
+        //Code from the OpenAL wiki
 //        MemoryStack.stackPush();
 //        IntBuffer channelsBuffer = MemoryStack.stackCallocInt(1);
 //        MemoryStack.stackPush();
@@ -84,21 +68,26 @@ public class AudioManager
 
 //        AL10.alBufferData(buffer, format, rawAudioBuffer, sampleRate);
         AL10.alBufferData(buffer, waveFile.format, waveFile.data, waveFile.samplerate);
-        buffers.add(buffer);
-        return buffer;
+        bufferPointers.put(key, buffer);
     }
 
-    public static void play(int buffer)
+    public static void play(String key)
     {
-        int source = AL10.alGenSources();
-        AL10.alSourcei(source, AL10.AL_BUFFER, buffer);
-        AL10.alSourcePlay(source);
+        if(bufferPointers.containsKey(key))
+        {
+            AL10.alSourcei(source, AL10.AL_BUFFER, bufferPointers.get(key));
+            AL10.alSourcePlay(source);
+        }else
+        {
+            System.err.println("Audio with key: " + key + " has not been initialized...");
+        }
     }
 
     public static void flush()
     {
-        for(int b : buffers)
-            AL10.alDeleteBuffers(b);
+        for(int buffer : bufferPointers.values())
+            AL10.alDeleteBuffers(buffer);
+        AL10.alDeleteSources(source);
         ALC10.alcDestroyContext(context);
         ALC10.alcCloseDevice(device);
     }

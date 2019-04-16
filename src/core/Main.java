@@ -47,6 +47,8 @@ public class Main
         System.out.println("OpenGL Version: " + GL11.glGetString(GL11.GL_VERSION));
         //Init GL code
         initGL();
+        //Init OpenAL
+        loadAudio();
         //Init game objects
         init();
 
@@ -161,7 +163,6 @@ public class Main
 
         initGUI();
 
-        AudioManager.init();
     }
 
     private static void initGUI()
@@ -192,6 +193,13 @@ public class Main
 //        //(WIDTH - instructionLabel.getWidth()) / 2
 //
 //        scoreLabel = new Label(score + "", apex64 , 1.0f);
+    }
+
+    private static void loadAudio()
+    {
+        AudioManager.init();
+        AudioManager.loadAudio("/res/audio/score.wav", "score");
+        AudioManager.loadAudio("/res/audio/dead.wav", "dead");
     }
 
     private static void flush()

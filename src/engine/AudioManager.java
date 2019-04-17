@@ -20,7 +20,7 @@ public class AudioManager
 {
     private static Map<String, Integer> bufferPointers;
     private static long context, device;
-    private static int source;
+    private static Map<String, Integer> sourcePointers;
 
     public static void init()
     {
@@ -31,9 +31,9 @@ public class AudioManager
         ALC10.alcMakeContextCurrent(context);
         ALCCapabilities alcCapabilities = ALC.createCapabilities(device);
         ALCapabilities  alCapabilities  = AL.createCapabilities(alcCapabilities);
-        source = AL10.alGenSources();
 
         bufferPointers = new HashMap<String, Integer>();
+        sourcePointers = new HashMap<String, Integer>();
     }
 
     public static void loadAudio(String path, String key)
@@ -69,25 +69,33 @@ public class AudioManager
 //        AL10.alBufferData(buffer, format, rawAudioBuffer, sampleRate);
         AL10.alBufferData(buffer, waveFile.format, waveFile.data, waveFile.samplerate);
         bufferPointers.put(key, buffer);
+        sourcePointers.put(key, AL10.alGenSources());
     }
 
     public static void play(String key)
     {
-        if(bufferPointers.containsKey(key))
+        if(bufferPointers.containsKey(key) && sourcePointers.containsKey(key))
         {
-            AL10.alSourcei(source, AL10.AL_BUFFER, bufferPointers.get(key));
-            AL10.alSourcePlay(source);
+            AL10.alSourcei(sourcePointers.get(key), AL10.AL_BUFFER, bufferPointers.get(key));
+            AL10.alSourcePlay(sourcePointers.get(key));
         }else
         {
             System.err.println("Audio with key: " + key + " has not been initialized...");
         }
     }
 
+    public static boolean isPlaying(String key)
+    {
+        int i = AL10.alGetSourcei(sourcePointers.get(key), AL10.AL_SOURCE_STATE);
+        return i == AL10.AL_PLAYING;
+    }
+
     public static void flush()
     {
         for(int buffer : bufferPointers.values())
             AL10.alDeleteBuffers(buffer);
-        AL10.alDeleteSources(source);
+        for(int source : sourcePointers.values())
+            AL10.alDeleteSources(source);
         ALC10.alcDestroyContext(context);
         ALC10.alcCloseDevice(device);
     }

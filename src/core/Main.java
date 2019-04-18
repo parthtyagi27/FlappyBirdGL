@@ -123,7 +123,9 @@ public class Main
     private static void update()
     {
         if(!Bird.isAlive)
+        {
             state = "over";
+        }
         if(state == "game")
         {
             level.update(bird);
@@ -200,6 +202,7 @@ public class Main
         AudioManager.init();
         AudioManager.loadAudio("/res/audio/score.wav", "score");
         AudioManager.loadAudio("/res/audio/dead.wav", "dead");
+        AudioManager.loadAudio("/res/audio/wing.wav", "wing");
     }
 
     private static void flush()

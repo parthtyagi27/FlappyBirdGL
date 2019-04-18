@@ -99,12 +99,16 @@ public class Bird extends Entity
         {
             positionVector.y += upwardsAcceleration;
             if(upwardsAcceleration <= 8f)
+            {
                 upwardsAcceleration += 0.5f;
+            }
             if (rotationVector.z() <= maxUpwardsRot)
             {
                 rotationVector.z += (rotationStep * upwardsAcceleration);
             }
         }
+        if(!AudioManager.isPlaying("wing"))
+            AudioManager.play("wing");
     }
 
     public void hover()
